@@ -1,0 +1,92 @@
+.
+├── build.gradle
+├── Directory_Tree.txt
+├── gradlew
+├── gradlew.bat
+├── lombok.config
+├── README.md
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── pragma
+    │   │           └── users
+    │   │               ├── application
+    │   │               │   ├── dto
+    │   │               │   │   ├── request
+    │   │               │   │   │   └── OwnerRequestDto.java
+    │   │               │   │   └── response
+    │   │               │   │       └── UserResponseDto.java
+    │   │               │   ├── handler
+    │   │               │   │   ├── impl
+    │   │               │   │   │   └── UserHandler.java
+    │   │               │   │   └── IUserHandler.java
+    │   │               │   └── mapper
+    │   │               │       ├── IUserRequestMapper.java
+    │   │               │       └── IUserResponseMapper.java
+    │   │               ├── domain
+    │   │               │   ├── api
+    │   │               │   │   └── IUserServicePort.java
+    │   │               │   ├── exception
+    │   │               │   │   └── DomainException.java
+    │   │               │   ├── model
+    │   │               │   │   ├── Role.java
+    │   │               │   │   └── User.java
+    │   │               │   ├── spi
+    │   │               │   │   ├── IRolePersistencePort.java
+    │   │               │   │   └── IUserPersistencePort.java
+    │   │               │   └── usecase
+    │   │               │       └── UserUseCase.java
+    │   │               ├── infrastructure
+    │   │               │   ├── configuration
+    │   │               │   │   ├── BeanConfiguration.java
+    │   │               │   │   └── SecurityConfig.java
+    │   │               │   ├── documentation
+    │   │               │   │   └── OpenApiConfiguration.java
+    │   │               │   ├── exception
+    │   │               │   │   └── NoDataFoundException.java
+    │   │               │   ├── exceptionhandler
+    │   │               │   │   ├── ControllerAdvisor.java
+    │   │               │   │   └── ExceptionResponse.java
+    │   │               │   ├── input
+    │   │               │   │   └── rest
+    │   │               │   │       └── UserRestController.java
+    │   │               │   └── out
+    │   │               │       └── jpa
+    │   │               │           ├── adapter
+    │   │               │           │   ├── RoleJpaAdapter.java
+    │   │               │           │   └── UserJpaAdapter.java
+    │   │               │           ├── entity
+    │   │               │           │   ├── RoleEntity.java
+    │   │               │           │   └── UserEntity.java
+    │   │               │           ├── mapper
+    │   │               │           │   ├── IRoleEntityMapper.java
+    │   │               │           │   └── IUserEntityMapper.java
+    │   │               │           └── repository
+    │   │               │               ├── IRoleRepository.java
+    │   │               │               └── IUserRepository.java
+    │   │               └── UsersApplication.java
+    │   └── resources
+    │       ├── application.yml
+    │       └── banner.txt
+    └── test
+        └── java
+            └── com
+                └── pragma
+                    └── users
+                        ├── domain
+                        │   └── usecase
+                        │       └── UserUseCaseTest.java
+                        ├── infrastructure
+                        │   ├── configuration
+                        │   │   └── BeanConfigurationTest.java
+                        │   ├── mapper
+                        │   │   └── UserRequestMapperTest.java
+                        │   └── out
+                        │       └── jpa
+                        │           └── adapter
+                        │               └── UserJpaAdapterTest.java
+                        └── UsersApplicationTests.java
+
+46 directories, 43 files
