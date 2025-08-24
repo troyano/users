@@ -6,4 +6,6 @@ public interface IUserServicePort {
 	void createUser(User user);
 
 	void createOwner(User user);
+
+	Boolean isOwner(String userName);
 }

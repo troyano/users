@@ -6,4 +6,6 @@ import com.pragma.users.infrastructure.out.jpa.entity.UserEntity;
 
 public interface IUserRepository extends JpaRepository<UserEntity, Long> {
 
+	Boolean existsByEmailAndRoleCode(String email, String roleCode);
+
 }

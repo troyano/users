@@ -24,4 +24,9 @@ public class UserHandler implements IUserHandler {
 		User user = userRequestMapper.toUser(ownerRequestDto);
 		userServicePort.createOwner(user);
 	}
+
+	@Override
+	public Boolean isOwner(final String userName) {
+		return userServicePort.isOwner(userName);
+	}
 }

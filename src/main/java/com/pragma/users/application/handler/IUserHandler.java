@@ -4,4 +4,6 @@ import com.pragma.users.application.dto.request.OwnerRequestDto;
 
 public interface IUserHandler {
 	void createOwner(OwnerRequestDto ownerRequestDto);
+
+	Boolean isOwner(String userName);
 }

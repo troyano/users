@@ -133,4 +133,22 @@ class UserUseCaseTest {
         userUseCase.createOwner(user);
         verify(domainNotificationPort).notifyError(Constants.MSG_OF_LEGAL_AGE);
     }
+
+    @Test
+    void isOwner_returnsTrue() {
+        String userName = "testuser";
+        when(userPersistencePort.isOwner(userName)).thenReturn(true);
+        Boolean result = userUseCase.isOwner(userName);
+        assertEquals(true, result);
+        verify(userPersistencePort).isOwner(userName);
+    }
+
+    @Test
+    void isOwner_returnsFalse() {
+        String userName = "testuser";
+        when(userPersistencePort.isOwner(userName)).thenReturn(false);
+        Boolean result = userUseCase.isOwner(userName);
+        assertEquals(false, result);
+        verify(userPersistencePort).isOwner(userName);
+    }
 }

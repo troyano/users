@@ -66,4 +66,9 @@ public class UserUseCase implements IUserServicePort {
 
 		userPersistencePort.saveUser(user);
 	}
+
+	@Override
+	public Boolean isOwner(final String userName) {
+		return userPersistencePort.isOwner(userName);
+	}
 }
