@@ -41,9 +41,9 @@ public class UserRestController {
 		@ApiResponse(responseCode = "404", description = "User not found", content = @Content),
 		@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
 	})
-	@GetMapping("/{userName}/is-owner")
-	public ResponseEntity<Boolean> isOwner(@PathVariable String userName) {
-		Boolean isOwner = userHandler.isOwner(userName);
+	@GetMapping("/{userName}/is-role/{role}")
+	public ResponseEntity<Boolean> isRole(@PathVariable String userName, @PathVariable String role) {
+		Boolean isOwner = userHandler.isRole(userName, role);
 		return ResponseEntity.ok(isOwner);
 	}
 }

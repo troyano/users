@@ -7,5 +7,5 @@ public interface IUserServicePort {
 
 	void createOwner(User user);
 
-	Boolean isOwner(String userName);
+	Boolean isRole(String userName, String role);
 }

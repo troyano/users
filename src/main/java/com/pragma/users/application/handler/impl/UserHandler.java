@@ -26,7 +26,7 @@ public class UserHandler implements IUserHandler {
 	}
 
 	@Override
-	public Boolean isOwner(final String userName) {
-		return userServicePort.isOwner(userName);
+	public Boolean isRole(final String userName, final String role) {
+		return userServicePort.isRole(userName, role);
 	}
 }

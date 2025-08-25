@@ -137,18 +137,18 @@ class UserUseCaseTest {
     @Test
     void isOwner_returnsTrue() {
         String userName = "testuser";
-        when(userPersistencePort.isOwner(userName)).thenReturn(true);
-        Boolean result = userUseCase.isOwner(userName);
+        when(userPersistencePort.isRole(userName, Constants.ROLE_OWNER)).thenReturn(true);
+        Boolean result = userUseCase.isRole(userName, Constants.ROLE_OWNER);
         assertEquals(true, result);
-        verify(userPersistencePort).isOwner(userName);
+        verify(userPersistencePort).isRole(userName, Constants.ROLE_OWNER);
     }
 
     @Test
     void isOwner_returnsFalse() {
         String userName = "testuser";
-        when(userPersistencePort.isOwner(userName)).thenReturn(false);
-        Boolean result = userUseCase.isOwner(userName);
+        when(userPersistencePort.isRole(userName, Constants.ROLE_OWNER)).thenReturn(false);
+        Boolean result = userUseCase.isRole(userName, Constants.ROLE_OWNER);
         assertEquals(false, result);
-        verify(userPersistencePort).isOwner(userName);
+        verify(userPersistencePort).isRole(userName, Constants.ROLE_OWNER);
     }
 }

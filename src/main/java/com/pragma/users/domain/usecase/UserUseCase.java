@@ -68,7 +68,7 @@ public class UserUseCase implements IUserServicePort {
 	}
 
 	@Override
-	public Boolean isOwner(final String userName) {
-		return userPersistencePort.isOwner(userName);
+	public Boolean isRole(final String userName, final String role) {
+		return userPersistencePort.isRole(userName, role);
 	}
 }

@@ -5,5 +5,5 @@ import com.pragma.users.domain.model.User;
 public interface IUserPersistencePort {
 	User saveUser(User user);
 
-	Boolean isOwner(String userName);
+	Boolean isRole(String userName, String role);
 }
