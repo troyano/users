@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.pragma.users.domain.util.Constants;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,19 +26,19 @@ public class OwnerRequestDto implements Serializable {
 	private String lastName;
 
 	@NotBlank
-	@Pattern(regexp = "\\d+", message = "The document must be numeric")
+	@Pattern(regexp = Constants.REGEX_ID, message = Constants.MSG_ID_NUMERIC)
 	private String identityDocument;
 
 	@NotBlank
-	@Size(max = 13, message = "The cell phone cannot exceed 13 characters")
-	@Pattern(regexp = "^\\+?[0-9]*$", message = "The cell phone can only contain numbers and optionally the + symbol")
+	@Size(max = Constants.NUMBER_13, message = Constants.MSG_CELL_PHONE_MAX_LENGTH)
+	@Pattern(regexp = Constants.REGEX_CELL_PHONE, message = Constants.MSG_CELL_PHONE_REGEX)
 	private String phone;
 
 	@NotNull
 	private LocalDate birthDate;
 
 	@NotBlank
-	@Email(message = "Invalid email format")
+	@Email(message = Constants.MSG_INVALID_EMAIL_FORMAT)
 	private String email;
 
 	@NotBlank

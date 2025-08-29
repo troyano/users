@@ -5,9 +5,9 @@ import java.time.Period;
 
 import com.pragma.users.domain.api.IUserServicePort;
 import com.pragma.users.domain.exception.DomainException;
+import com.pragma.users.domain.exception.ValidationUtils;
 import com.pragma.users.domain.model.Role;
 import com.pragma.users.domain.model.User;
-import com.pragma.users.domain.spi.IDomainNotificationPort;
 import com.pragma.users.domain.spi.IPasswordEncoderPort;
 import com.pragma.users.domain.spi.IRolePersistencePort;
 import com.pragma.users.domain.spi.IUserPersistencePort;
@@ -18,14 +18,12 @@ public class UserUseCase implements IUserServicePort {
 	private final IUserPersistencePort userPersistencePort;
 	private final IRolePersistencePort rolePersistencePort;
 	private final IPasswordEncoderPort passwordEncoderPort;
-	private final IDomainNotificationPort domainNotificationPort;
 
 	public UserUseCase(final IUserPersistencePort userPersistencePort, final IRolePersistencePort rolePersistencePort,
-			final IPasswordEncoderPort passwordEncoderPort, final IDomainNotificationPort domainNotificationPort) {
+			final IPasswordEncoderPort passwordEncoderPort) {
 		this.userPersistencePort = userPersistencePort;
 		this.rolePersistencePort = rolePersistencePort;
 		this.passwordEncoderPort = passwordEncoderPort;
-		this.domainNotificationPort = domainNotificationPort;
 	}
 
 	@Override
@@ -35,22 +33,14 @@ public class UserUseCase implements IUserServicePort {
 	}
 
 	private void validateBasicData(final User user) {
-		if (!user.getEmail().matches(Constants.REGEX_EMAIL)) {
-			domainNotificationPort.notifyError(Constants.MSG_INVALID_EMAIL);
-		}
-		if (!user.getPhone().matches(Constants.REGEX_CELL_PHONE)) {
-			domainNotificationPort.notifyError(Constants.MSG_INVALID_CELL_PHONE);
-		}
-		if (!user.getIdentityDocument().matches(Constants.REGEX_ID)) {
-			domainNotificationPort.notifyError(Constants.MSG_INVALID_ID);
-		}
+		ValidationUtils.validateEmail(user.getEmail());
+		ValidationUtils.validatePhone(user.getPhone());
+		ValidationUtils.validateIdentityDocument(user.getIdentityDocument());
 	}
 
 	private void validateAdult(final LocalDate birthDate) {
 		int age = Period.between(birthDate, LocalDate.now()).getYears();
-		if (age < Constants.NUMERO_18) {
-			domainNotificationPort.notifyError(Constants.MSG_OF_LEGAL_AGE);
-		}
+		ValidationUtils.validateAdultAge(age);
 	}
 
 	@Override

@@ -2,14 +2,13 @@ package com.pragma.users.domain.usecase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.pragma.users.domain.exception.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import com.pragma.users.domain.exception.DomainException;
 import com.pragma.users.domain.model.Role;
 import com.pragma.users.domain.model.User;
-import com.pragma.users.domain.spi.IDomainNotificationPort;
 import com.pragma.users.domain.spi.IPasswordEncoderPort;
 import com.pragma.users.domain.spi.IRolePersistencePort;
 import com.pragma.users.domain.spi.IUserPersistencePort;
@@ -30,7 +28,6 @@ class UserUseCaseTest {
     @Mock private IUserPersistencePort userPersistencePort;
     @Mock private IRolePersistencePort rolePersistencePort;
     @Mock private IPasswordEncoderPort passwordEncoderPort;
-    @Mock private IDomainNotificationPort domainNotificationPort;
 
     @InjectMocks private UserUseCase userUseCase;
 
@@ -43,12 +40,9 @@ class UserUseCaseTest {
         user.setEmail("juan@test.com");
         user.setPhone("+573005698325");
         user.setIdentityDocument("123456789");
-        user.setBirthDate(LocalDate.of(Constants.NUMERO_1990, 1, 1));
+        user.setBirthDate(LocalDate.of(Constants.NUMBER_1990, 1, 1));
         user.setPassword("secreta");
-        userUseCase = new UserUseCase(userPersistencePort, rolePersistencePort, passwordEncoderPort, domainNotificationPort);
-
-        doAnswer(invocation -> { throw new DomainException(invocation.getArgument(0)); })
-            .when(domainNotificationPort).notifyError(anyString());
+        userUseCase = new UserUseCase(userPersistencePort, rolePersistencePort, passwordEncoderPort);
     }
 
     @Test
@@ -60,25 +54,29 @@ class UserUseCaseTest {
     @Test
     void createUser_invalidEmail() {
         user.setEmail("invalid");
-        assertThrows(DomainException.class, () -> userUseCase.createUser(user));
+        ValidationException exception = assertThrows(ValidationException.class, () -> userUseCase.createUser(user));
+        assertEquals(Constants.MSG_INVALID_EMAIL_FORMAT, exception.getMessage());
     }
 
     @Test
     void createUser_invalidCellPhone() {
         user.setPhone("invalid");
-        assertThrows(DomainException.class, () -> userUseCase.createUser(user));
+        ValidationException exception = assertThrows(ValidationException.class, () -> userUseCase.createUser(user));
+        assertEquals(Constants.MSG_CELL_PHONE_REGEX, exception.getMessage());
     }
 
     @Test
     void createUser_invalidId() {
         user.setIdentityDocument("invalid_id");
-        assertThrows(DomainException.class, () -> userUseCase.createUser(user));
+        ValidationException exception = assertThrows(ValidationException.class, () -> userUseCase.createUser(user));
+        assertEquals(Constants.MSG_ID_NUMERIC, exception.getMessage());
     }
 
     @Test
     void createOwner_underage() {
-        user.setBirthDate(LocalDate.now().minusYears(Constants.NUMERO_15));
-        assertThrows(DomainException.class, () -> userUseCase.createOwner(user));
+        user.setBirthDate(LocalDate.now().minusYears(Constants.NUMBER_15));
+        ValidationException exception = assertThrows(ValidationException.class, () -> userUseCase.createOwner(user));
+        assertEquals(Constants.MSG_OF_LEGAL_AGE, exception.getMessage());
     }
 
     @Test
@@ -98,40 +96,6 @@ class UserUseCaseTest {
         assertEquals("encoded", user.getPassword());
         assertEquals(role, user.getRole());
         verify(userPersistencePort).saveUser(user);
-    }
-
-    @Test
-    void createUser_invalidEmail_notifyErrorCalled() {
-        user.setEmail("invalid");
-        doAnswer(invocation -> null).when(domainNotificationPort).notifyError(anyString());
-        userUseCase.createUser(user);
-        verify(domainNotificationPort).notifyError(Constants.MSG_INVALID_EMAIL);
-    }
-
-    @Test
-    void createUser_invalidCellPhone_notifyErrorCalled() {
-        user.setPhone("invalid");
-        doAnswer(invocation -> null).when(domainNotificationPort).notifyError(anyString());
-        userUseCase.createUser(user);
-        verify(domainNotificationPort).notifyError(Constants.MSG_INVALID_CELL_PHONE);
-    }
-
-    @Test
-    void createUser_invalidId_notifyErrorCalled() {
-        user.setIdentityDocument("invalid_id");
-        doAnswer(invocation -> null).when(domainNotificationPort).notifyError(anyString());
-        userUseCase.createUser(user);
-        verify(domainNotificationPort).notifyError(Constants.MSG_INVALID_ID);
-    }
-
-    @Test
-    void createOwner_underage_notifyErrorCalled() {
-        user.setBirthDate(LocalDate.now().minusYears(Constants.NUMERO_15));
-        doAnswer(invocation -> null).when(domainNotificationPort).notifyError(anyString());
-        Role role = new Role(1L, Constants.ROLE_OWNER, "Owner");
-        when(rolePersistencePort.findByCode(Constants.ROLE_OWNER)).thenReturn(Optional.of(role));
-        userUseCase.createOwner(user);
-        verify(domainNotificationPort).notifyError(Constants.MSG_OF_LEGAL_AGE);
     }
 
     @Test

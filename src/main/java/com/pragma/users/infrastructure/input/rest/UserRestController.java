@@ -1,5 +1,7 @@
 package com.pragma.users.infrastructure.input.rest;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,7 @@ public class UserRestController {
 			@ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
 			@ApiResponse(responseCode = "409", description = "User already exists", content = @Content) })
 	@PostMapping("/owners")
-	public ResponseEntity<Void> createOwner(final @RequestBody OwnerRequestDto ownerRequestDto) {
+	public ResponseEntity<Void> createOwner(@RequestBody @Valid OwnerRequestDto ownerRequestDto) {
 		userHandler.createOwner(ownerRequestDto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}

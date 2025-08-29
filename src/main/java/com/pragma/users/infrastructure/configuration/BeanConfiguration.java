@@ -6,12 +6,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.pragma.users.domain.api.IUserServicePort;
-import com.pragma.users.domain.spi.IDomainNotificationPort;
+import com.pragma.users.domain.spi.IPasswordEncoderPort;
 import com.pragma.users.domain.spi.IRolePersistencePort;
 import com.pragma.users.domain.spi.IUserPersistencePort;
-import com.pragma.users.domain.spi.IPasswordEncoderPort;
 import com.pragma.users.domain.usecase.UserUseCase;
-import com.pragma.users.infrastructure.exception.DomainNotificationAdapter;
 import com.pragma.users.infrastructure.out.jpa.adapter.RoleJpaAdapter;
 import com.pragma.users.infrastructure.out.jpa.adapter.UserJpaAdapter;
 import com.pragma.users.infrastructure.out.jpa.mapper.IRoleEntityMapper;
@@ -48,17 +46,12 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	public IDomainNotificationPort domainNotificationPort() {
-		return new DomainNotificationAdapter();
-	}
-
-	@Bean
 	public IPasswordEncoderPort passwordEncoderPort(PasswordEncoder passwordEncoder) {
 		return new PasswordEncoderAdapter(passwordEncoder);
 	}
 
 	@Bean
 	public IUserServicePort userServicePort() {
-		return new UserUseCase(userPersistencePort(), rolPersistencePort(), passwordEncoderPort(passwordEncoder()), domainNotificationPort());
+		return new UserUseCase(userPersistencePort(), rolPersistencePort(), passwordEncoderPort(passwordEncoder()));
 	}
 }
