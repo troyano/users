@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.pragma.users.domain.exception.AuthSecurityException;
 import com.pragma.users.domain.exception.ValidationException;
 import com.pragma.users.infrastructure.exception.DomainNotificationException;
 import com.pragma.users.infrastructure.exception.NoDataFoundException;
@@ -32,5 +33,10 @@ public class ControllerAdvisor {
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<String> handleValidationException(ValidationException ex) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+	}
+
+	@ExceptionHandler(AuthSecurityException.class)
+	public ResponseEntity<String> handleValidationException(AuthSecurityException ex) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
 	}
 }

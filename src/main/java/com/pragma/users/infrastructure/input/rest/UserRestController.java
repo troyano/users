@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
+import static com.pragma.users.domain.util.Constants.ROLE_ADMIN;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class UserRestController {
 			@ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
 			@ApiResponse(responseCode = "409", description = "User already exists", content = @Content) })
 	@PostMapping("/owners")
+	@PreAuthorize("hasRole('" + ROLE_ADMIN + "')")
 	public ResponseEntity<Void> createOwner(@RequestBody @Valid OwnerRequestDto ownerRequestDto) {
 		userHandler.createOwner(ownerRequestDto);
 		return new ResponseEntity<>(HttpStatus.CREATED);

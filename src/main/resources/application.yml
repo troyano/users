@@ -14,3 +14,9 @@ spring:
 
 appDescription: "Pragma users"
 appVersion: "1.0.0"
+
+logging:
+  level:
+    org:
+      springframework:
+        security=DEBUG:
