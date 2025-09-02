@@ -5,9 +5,7 @@ import java.time.Instant;
 import java.util.Date;
 
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWKSet;
-import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 
 import com.nimbusds.jose.crypto.RSASSASigner;
@@ -31,6 +29,7 @@ public class JwtService {
 	public String generateToken(UserAuth user, Duration ttl) {
 		Instant now = Instant.now();
 		var uid = user.getId().toString();
+
 		JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .subject(uid)
                 .claim("email", user.getEmail())

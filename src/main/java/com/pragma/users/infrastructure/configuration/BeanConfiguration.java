@@ -1,5 +1,7 @@
 package com.pragma.users.infrastructure.configuration;
 
+import com.pragma.users.domain.api.IUserEmployeeServicePort;
+import com.pragma.users.domain.usecase.UserEmployeeUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +23,6 @@ import com.pragma.users.infrastructure.out.jpa.repository.IRoleRepository;
 import com.pragma.users.infrastructure.out.jpa.repository.IUserRepository;
 import com.pragma.users.infrastructure.out.security.JwtServiceAdapter;
 import com.pragma.users.infrastructure.out.security.PasswordEncoderAdapter;
-import com.nimbusds.jose.jwk.RSAKey;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,6 +59,11 @@ public class BeanConfiguration {
 	@Bean
 	public IUserServicePort userServicePort() {
 		return new UserUseCase(userPersistencePort(), rolPersistencePort(), passwordEncoderPort(passwordEncoder()));
+	}
+
+	@Bean
+	public IUserEmployeeServicePort userEmployeeServicePort() {
+		return new UserEmployeeUseCase(userPersistencePort(), rolPersistencePort(), passwordEncoderPort(passwordEncoder()));
 	}
 
 	@Bean

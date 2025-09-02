@@ -1,5 +1,6 @@
 package com.pragma.users.infrastructure.out.jpa.adapter;
 
+import com.pragma.users.domain.model.UserEmployee;
 import org.springframework.stereotype.Component;
 
 import com.pragma.users.domain.model.User;
@@ -33,6 +34,16 @@ public class UserJpaAdapter implements IUserPersistencePort {
 	@Override
 	public UserAuth userByEmail(String userName) {
 		UserEntity userEntity = userRepository.findByEmail(userName).orElse(null);
-		return userEntityMapper.toUserAuth(userEntity); //TODO
+		return userEntityMapper.toUserAuth(userEntity);
+	}
+
+	@Override
+	public void saveUserEmployee(UserEmployee user) {
+		UserEntity userEntity = userEntityMapper.toEntity(user);
+		userRepository.save(userEntity);
+	}
+	@Override
+	public boolean userExist(String userName) {
+		return userRepository.existsByEmail(userName);
 	}
 }

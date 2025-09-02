@@ -1,5 +1,6 @@
 package com.pragma.users.infrastructure.out.jpa.mapper;
 
+import com.pragma.users.domain.model.UserEmployee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -11,9 +12,11 @@ import com.pragma.users.infrastructure.out.jpa.entity.UserEntity;
 @Mapper(componentModel = "spring", uses = { IRoleEntityMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IUserEntityMapper {
 	User toUser(UserEntity userEntity);
+	User toUserEmployee(UserEntity userEntity);
 
 	@Mapping(target = "role", source = "role.code")
 	UserAuth toUserAuth(UserEntity userEntity);
 
 	UserEntity toEntity(User user);
+	UserEntity toEntity(UserEmployee user);
 }

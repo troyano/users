@@ -1,5 +1,7 @@
 package com.pragma.users.application.mapper;
 
+import com.pragma.users.application.dto.request.EmployeeRequestDto;
+import com.pragma.users.domain.model.UserEmployee;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -13,4 +15,6 @@ public interface IUserRequestMapper {
 	User toUser(OwnerRequestDto ownerRequestDto);
 
 	Login toLoginUser(LoginRequestDto loginRequest);
+
+	UserEmployee toUserEmployee(EmployeeRequestDto employeeRequestDto);
 }

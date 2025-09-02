@@ -1,6 +1,5 @@
 package com.pragma.users.infrastructure.configuration;
 
-import org.springframework.expression.ParseException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,31 +16,30 @@ import java.util.Collections;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtValidator jwtValidator;
+
     public JwtAuthorizationFilter(JwtValidator jwtValidator) {
         this.jwtValidator = jwtValidator;
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
+            try {
+                String email = jwtValidator.extractClaim(token, "email");
+                String role = jwtValidator.extractClaim(token, "roles");
 
-            if (jwtValidator.validateToken(token)) {
-                try {
-                    String email = jwtValidator.extractClaim(token, "email");
-                    String role = jwtValidator.extractClaim(token, "roles");
-
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(email, null,
-                                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role)));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } catch (java.text.ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(email, null,
+                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role)));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (java.text.ParseException e) {
+                throw new RuntimeException(e);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

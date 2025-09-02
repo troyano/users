@@ -8,7 +8,6 @@ class UsersApplicationTests {
 
 	@Test
 	void contextLoads() {
-		// TODO document why this method is empty
+		// Document why this method is empty
 	}
-
 }

@@ -1,5 +1,8 @@
 package com.pragma.users.application.handler.impl;
 
+import com.pragma.users.application.dto.request.EmployeeRequestDto;
+import com.pragma.users.domain.api.IUserEmployeeServicePort;
+import com.pragma.users.domain.model.UserEmployee;
 import org.springframework.stereotype.Service;
 
 import com.pragma.users.application.dto.request.LoginRequestDto;
@@ -21,9 +24,11 @@ import lombok.RequiredArgsConstructor;
 public class UserHandler implements IUserHandler {
 
 	private final IUserServicePort userServicePort;
+	private final IUserEmployeeServicePort userEmployeeServicePort;
+	private final IAuthServicePort authService;
+
 	private final IUserRequestMapper userRequestMapper;
 	private final IAuthResponseMapper authResponseMapper;
-	private final IAuthServicePort authService;
 
 	@Override
 	public void createOwner(final OwnerRequestDto ownerRequestDto) {
@@ -41,5 +46,11 @@ public class UserHandler implements IUserHandler {
 		Login loginRequest = userRequestMapper.toLoginUser(loginRequestDto);
 		TokenResponse tokenResponse = authService.auth(loginRequest);
 		return authResponseMapper.toResponse(tokenResponse);
+	}
+
+	@Override
+	public void createEmployee(EmployeeRequestDto employeeRequestDto) {
+		UserEmployee user = userRequestMapper.toUserEmployee(employeeRequestDto);
+		userEmployeeServicePort.createEmployee(user);
 	}
 }

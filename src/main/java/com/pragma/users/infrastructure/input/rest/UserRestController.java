@@ -2,6 +2,7 @@ package com.pragma.users.infrastructure.input.rest;
 
 import javax.validation.Valid;
 
+import com.pragma.users.application.dto.request.EmployeeRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 import static com.pragma.users.domain.util.Constants.ROLE_ADMIN;
+import static com.pragma.users.domain.util.Constants.ROLE_OWNER;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -51,5 +53,16 @@ public class UserRestController {
 	public ResponseEntity<Boolean> isRole(@PathVariable String userName, @PathVariable String role) {
 		Boolean isOwner = userHandler.isRole(userName, role);
 		return ResponseEntity.ok(isOwner);
+	}
+
+	@Operation(summary = "Create a new employee")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Employee created", content = @Content),
+			@ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
+			@ApiResponse(responseCode = "409", description = "Employee already exists", content = @Content) })
+	@PostMapping("/employees")
+	@PreAuthorize("hasRole('" + ROLE_OWNER + "')")
+	public ResponseEntity<Void> createEmployee(@RequestBody @Valid EmployeeRequestDto employeeRequestDto) {
+		userHandler.createEmployee(employeeRequestDto);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 }

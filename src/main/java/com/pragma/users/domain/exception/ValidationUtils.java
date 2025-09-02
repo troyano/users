@@ -31,4 +31,10 @@ public class ValidationUtils {
 	private ValidationUtils() {
 		super();
 	}
+
+	public static void dataExist(boolean validation, String message) {
+		if (validation) {
+			throw new ValidationDatExistException(message);
+		}
+	}
 }
