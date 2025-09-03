@@ -2,6 +2,7 @@ package com.pragma.users.infrastructure.input.rest;
 
 import javax.validation.Valid;
 
+import com.pragma.users.application.dto.request.ClientRequestDto;
 import com.pragma.users.application.dto.request.EmployeeRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,16 @@ public class UserRestController {
 	@PreAuthorize("hasRole('" + ROLE_OWNER + "')")
 	public ResponseEntity<Void> createEmployee(@RequestBody @Valid EmployeeRequestDto employeeRequestDto) {
 		userHandler.createEmployee(employeeRequestDto);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@Operation(summary = "Create a new client")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Client created", content = @Content),
+			@ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
+			@ApiResponse(responseCode = "409", description = "Client already exists", content = @Content) })
+	@PostMapping("/clients")
+	public ResponseEntity<Void> createClients(@RequestBody @Valid ClientRequestDto clientRequestDto) {
+		userHandler.createClient(clientRequestDto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 }

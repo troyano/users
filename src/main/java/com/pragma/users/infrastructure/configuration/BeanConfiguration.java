@@ -1,6 +1,8 @@
 package com.pragma.users.infrastructure.configuration;
 
+import com.pragma.users.domain.api.IUserClientServicePort;
 import com.pragma.users.domain.api.IUserEmployeeServicePort;
+import com.pragma.users.domain.usecase.UserClientUseCase;
 import com.pragma.users.domain.usecase.UserEmployeeUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,7 +67,10 @@ public class BeanConfiguration {
 	public IUserEmployeeServicePort userEmployeeServicePort() {
 		return new UserEmployeeUseCase(userPersistencePort(), rolPersistencePort(), passwordEncoderPort(passwordEncoder()));
 	}
-
+	@Bean
+	public IUserClientServicePort userClientServicePort() {
+		return new UserClientUseCase(userPersistencePort(), rolPersistencePort(), passwordEncoderPort(passwordEncoder()));
+	}
 	@Bean
 	public IJwtServicePort jwtServicePort(JwtService jwtService) {
 		return new JwtServiceAdapter(jwtService);

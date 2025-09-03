@@ -1,5 +1,6 @@
 package com.pragma.users.application.handler;
 
+import com.pragma.users.application.dto.request.ClientRequestDto;
 import com.pragma.users.application.dto.request.EmployeeRequestDto;
 import com.pragma.users.application.dto.request.LoginRequestDto;
 import com.pragma.users.application.dto.request.OwnerRequestDto;
@@ -13,4 +14,6 @@ public interface IUserHandler {
 	TokenResponseDto auth(LoginRequestDto loginRequest);
 
     void createEmployee(EmployeeRequestDto employeeRequestDto);
+
+    void createClient(ClientRequestDto clientRequestDto);
 }

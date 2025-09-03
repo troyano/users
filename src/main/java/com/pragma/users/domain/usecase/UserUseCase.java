@@ -28,14 +28,15 @@ public class UserUseCase implements IUserServicePort {
 
 	@Override
 	public void createUser(final User user) {
-		validateBasicData(user);
+		validateBasicData(user.getEmail(), user.getPhone(), user.getIdentityDocument());
 		userPersistencePort.saveUser(user);
 	}
 
-	private void validateBasicData(final User user) {
-		ValidationUtils.validateEmail(user.getEmail());
-		ValidationUtils.validatePhone(user.getPhone());
-		ValidationUtils.validateIdentityDocument(user.getIdentityDocument());
+	private void validateBasicData(final String email, final String phone,
+			final String identityDocument) {
+		ValidationUtils.validateEmail(email);
+		ValidationUtils.validatePhone(phone);
+		ValidationUtils.validateIdentityDocument(identityDocument);
 	}
 
 	private void validateAdult(final LocalDate birthDate) {
@@ -45,7 +46,7 @@ public class UserUseCase implements IUserServicePort {
 
 	@Override
 	public void createOwner(final User user) {
-		validateBasicData(user);
+		validateBasicData(user.getEmail(), user.getPhone(), user.getIdentityDocument());
 		validateAdult(user.getBirthDate());
 
 		Role roleOwner = rolePersistencePort.findByCode(Constants.ROLE_OWNER)

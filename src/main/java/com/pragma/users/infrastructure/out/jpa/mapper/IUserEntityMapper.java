@@ -1,5 +1,6 @@
 package com.pragma.users.infrastructure.out.jpa.mapper;
 
+import com.pragma.users.domain.model.UserClient;
 import com.pragma.users.domain.model.UserEmployee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,4 +20,5 @@ public interface IUserEntityMapper {
 
 	UserEntity toEntity(User user);
 	UserEntity toEntity(UserEmployee user);
+	UserEntity toEntity(UserClient user);
 }
